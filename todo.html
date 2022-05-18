@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app" class="container">
+        <input type="text" v-model="text"> <button type="button"
+        @click="addItem">增加文字</button>
+
+        <ul>
+            <li v-for="item in data" :key="item.id">
+                {{ item.text }}
+                <button type="button"
+                @click="editItem(item)">編輯品項</button>
+                <button type="button"
+                @click="removeItem(item)">移除品項</button>
+            </li>
+        </ul>
+
+        <hr>
+        <input type="text" v-model="temp.text">
+        <button type="button"
+        @click="doneEdit">編輯完成</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.33/vue.global.min.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data(){
+                return{
+                    text: '我是安妮',
+                    data: [],
+                    temp: {}
+                };
+            },
+            methods: {
+                // #1 新增資料
+                addItem() {
+                    this.data.push({
+                        id: this.data.length + 1,
+                        text: this.text
+                    });
+                    this.text = '';
+                },
+                // #2 移除資料
+                removeItem(item) {
+                    // console.log(item);
+                    //使用 findIndex, 從 id 取得陣列索引 (index)
+                    const index = this.data.findIndex(obj => obj.id === item.id);
+                    console.log('index: ', index);
+                    this.data.splice(index, 1); //array.splice(index, deleteCount)
+                },
+                // #3 編輯資料
+                editItem(item) {
+                    this.temp = { ...item }; //解構 ES6? 避免傳參考問題
+                    // console.log(this.temp);
+                },
+                // #4 把資料寫回
+                doneEdit() {
+                    const index = this.data.findIndex(obj => obj.id === this.temp.id);
+                    this.data[index] = this.temp //把資料寫回索引
+                    this.temp = {}; //this.temp 清空
+                }
+            },
+            mounted() {
+
+            }
+        });
+        app.mount('#app');
+    </script>
+</body>
+</html>

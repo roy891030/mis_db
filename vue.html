@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script> <!--vue cdn-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> <!--bootstrap cdn-->
+</head>
+<body>
+    <div id="app">
+        {{ text }}
+        {{ name }}
+        {{ num }} <!--讀 num 出來-->
+        <input type="number" v-model="num"> <!--和 num 雙向綁定-->
+        <input type="text" v-model="name"> <!--和 name 雙向綁定-->
+        <!-- 指令 (v-) -->
+        <hr>
+
+        {{ person.name }}
+        {{ person.image }}
+        <img :src="person.image" :alt="person.name">
+        <i class="bi bi-sun" v-if="person.gender === 'male'"></i>
+        <i class="bi bi-umbrella-fill" v-else></i>
+        {{ person.cash }}
+        <button type="button" @click="clickAlert">增加</button>
+        <hr>
+
+        <ul>
+            <li v-for="item in people">
+                {{ item.name }}
+                <i class="bi bi-sun" v-if="item.gender === 'male'"></i>
+                <i class="bi bi-umbrella-fill" v-else></i>
+                <hr>
+                {{ item.cash }}
+                <button type="button" @click="item.cash++">增加</button>
+            </li>
+        </ul>
+
+    </div>
+
+
+    <script>
+        Vue.createApp({
+            //data資料 函式
+            data:function(){
+                return{
+                    text: 'my name is anni.',
+                    name: 'raymond',
+                    num: 0,
+                    person: {
+                        name: 'raymond',
+                        image: 'https://images.app.goo.gl/yspv47ohVSMpmsp97',
+                        cash: 1000,
+                        gender: 'male'
+                    },
+                    people: [
+                        {
+                            name: '一號先生',
+                            cash: 10000,
+                            gender: 'male'
+                        },
+                        {
+                            name: '二號小姐',
+                            cash: 10,
+                            gender: 'female'
+                        },
+                        {
+                            name: '三號壞人',
+                            cash: 0,
+                            gender: 'male'
+                        }
+                    ]
+                };
+            },
+            //methods方法 物件
+            methods:{
+                clickAlert: function(){
+                    alert('我被觸發了!');
+                }
+            },
+            //mounted生命週期 函式
+            //初始化資料
+            mounted:function(){
+                console.log(this.text);
+                this.text = '我叫安妮'; //Ajex 取得的資料放這邊
+                // clickAlert();
+                console.log(this.person.gender);
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

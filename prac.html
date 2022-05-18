@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> <!--bootstrap cdn-->
+</head>
+<body>
+    <div id="app">
+        <!-- #1 呈現 text 在畫面上 -->
+        {{ text }}
+        <!-- #2 使用 v-model 綁定 num 資料-->
+        <input type="text" v-model="num">
+        <!-- #3 綁定 num 同時使用修飾符確保型別為 number -->
+        <input type="number" v-model.number="num">
+        {{ num }}
+        <!-- #4 呈現 person.name 在畫面上 -->
+        {{ person.name }}
+        <!-- #5 取出 person.image 並以圖片形式呈現在畫面上 (使用 v-blind) -->
+        <br>
+        <img v-bind:src="person.image" width="200" alt="">
+        <!-- #6 將上述的 v-blind 改為縮寫 -->
+        <br>
+        <img :src="person.image" width="200" alt="">
+        <!-- #7 使用 a 標籤搭配 method 將 person 參數傳入, 用以修改cash 金額 -->
+        <a href="" v-on:click="changeCash(person)">點我</a>
+        <!-- #8 為 v-on 加入修飾符 (清掉 html 預設事件) --> 
+        <a href="" @click.prevent="changeCash(person)">點我</a>
+        <!-- #9 使用 v-if 判斷 gender 的 icon 切換 -->
+        <i class="bi bi-cpu" v-if="person.gender === 'male'"></i>
+        <i class="bi bi-heart-arrow" v-else></i>
+        <!-- #10 使用 v-else 判斷另一個 -->
+        <!-- #11 使用 v-for 迴圈呈現 people 資料 -->
+        <ul>
+            <li v-for="(item, key) in peopleObj" :key="key">
+                {{ item.name }} {{ key }}
+            </li>
+        </ul>
+        <!-- #12 將 people 改為物件顯示 -->
+        <!-- #13 v-for 搭配 :key -->
+        <!-- #14 v-for key 之問題 (須將 people 改為陣列形式) -->
+        <!-- #15 呈現 people 中的資料 -->
+        <!-- #16 將 people 中的 name 綁定 v-model -->
+        <ul>
+            <li v-for="(item, key) in peopleObj" :key="key">
+                {{ item.name }} {{ key }}
+                <input type="text" v-model="item.name">
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.33/vue.global.min.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                //資料集
+                return {
+                    text: 'my name is anni',
+                    num: 1,
+                    person: {
+                        name: 'raymond',
+                        image: 'S__37298181.jpg',
+                        cash: 1000,
+                        gender: 'male'
+                    },
+                    //陣列 
+                    people: [
+                        {
+                            name: '一號先生',
+                            cash: 10000,
+                            gender: 'male'
+                        },
+                        {
+                            name: '二號小姐',
+                            cash: 10,
+                            gender: 'female'
+                        },
+                        {
+                            name: '三號壞人',
+                            cash: 0,
+                            gender: 'male'
+                        }
+                    ],
+                    //物件格式：
+                    peopleObj: {
+                        //定義屬性名稱
+                        first: {
+                            name: '一號先生',
+                            cash: 10000,
+                            gender: 'male'
+                        },
+                        second: {
+                            name: '二號小姐',
+                            cash: 10,
+                            gender: 'female'
+                        },
+                        third: {
+                            name: '三號壞人',
+                            cash: 0,
+                            gender: 'male'
+                        }
+                    }
+                };
+            },
+            methods :{
+                //方法集
+                changeCash(item) {
+                    console.log(item);
+                    // alert('yes');
+                }
+            },
+            mounted() {
+
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <div id="text"></div>
+    <input type="number" id="num">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        console.log($);
+        const name = 'anni';
+
+        $(document).ready(function(){
+            $('#text').text(name);
+            // consloe.log($('#text'));
+        });
+
+        $('#num').on('change', function(){
+            console.log($(this).val());
+        })
+    </script>
+</body>
+</html>

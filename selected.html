@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--bootstrap cdn-->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> -->
+    <!--bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app" class="container">
+        <button type="button" @click="addNum">累加數值 {{ num }}</button>
+        <!-- 畫面上的資料運算 filter ( =用函式修飾值 ) -->
+        <!-- {{ 函式(變數名稱) }} -->
+        dollarSign: {{ dollarSign(num) }}
+        <!-- 運用 computed -->
+        <hr>
+        computed: {{ doubleNum }}
+
+        <hr>
+        <select class="form-select mb-3"
+        v-model="genderFilter">
+            <option selected value="">請選擇</option>
+            <option value="male">男生</option>
+            <option value="female">女生</option>
+        </select>
+        <div class="row">
+            <div class="col-3 mb-3"
+            v-for="item in filterData" :key="item.cell">
+                <div class="card">
+                    <img :src="item.picture.large" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <div class="card-title">{{ item.email }}</div>
+                        <p class="card-text">
+                            <!--# 把 age * 100 當作金額 (套用 toCurrency 的方法) -->
+                            {{ item.dob.age * 100}}
+                        </p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.33/vue.global.min.js"></script>
+    <!-- 好像是 computed 的 ? -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script>   
+        const app = Vue.createApp({
+            data() {
+                return{
+                    text: 'my name is anni',
+                    num: 1,
+                    person: {
+                        name: 'raymond',
+                        image: 'S__37298181.jpg',
+                        cash: 1000,
+                        gender: 'male'
+                    },
+                    data: [],
+                    genderFilter: ''
+                };
+            },
+            methods: {
+                addNum() {
+                    this.num++;
+                },
+                dollarSign(dollar) {
+                    console.log('dollarSign', dollar);
+                    // return dollar;
+                    return `$${dollar}`;
+                },
+                //隨機資料
+                getRandomUser() {
+                    axios.get('https://randomuser.me/api/?results=10')
+                    .then((res) => {
+                        // # 把資料加入 data 內
+                        this.data = res.data.results;
+                        console.log(this.data);
+                    })
+                },
+                // # 加入千分號
+                toCurrency(num) {
+                    const parts = num.toString().split('.');
+                    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return `$${parts.join('.')}`;
+                }
+            },
+            computed: { //當 data 資料變動時, computed 會重新做運算
+                //"不修改原始數值" 的情況下產生新值 (methods 會更動)
+                //#1 雙倍運算 num
+                doubleNum() {
+                    return this.num * 2;
+                },
+                //#2 過濾列表
+                filterData() {
+                    // data 所選擇的性別 vs Ajex 所取得的資料性別
+                    const newData = this.data.filter(item => {
+                        return item.gender === this.genderFilter //判斷
+                    })
+                    if(!this.genderFilter) { //預設顯示全部
+                        return this.data;
+                    }
+                    return newData;
+                }
+            },
+            mounted() {
+                // # 觸發取得遠端資料
+                this.getRandomUser();
+            }
+        }).mount('#app')
+    </script> 
+</body>
+</html>
